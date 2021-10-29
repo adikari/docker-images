@@ -5,7 +5,7 @@ ENV YARN_VERSION 1.19.1
 # Install dependencies
 RUN apk -v --update add \
         jq \
-        python3 \
+        py3-pip \
         groff \
         less \
         bash \
