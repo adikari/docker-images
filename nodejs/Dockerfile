@@ -1,4 +1,4 @@
-FROM node:14.15.4-alpine
+FROM node:14.18.3-alpine
 
 ENV YARN_VERSION 1.19.1
 
@@ -6,6 +6,7 @@ ENV YARN_VERSION 1.19.1
 RUN apk -v --update add \
         jq \
         python3 \
+        cmd:pip3 \
         groff \
         less \
         bash \
@@ -21,13 +22,7 @@ RUN rm /usr/local/bin/yarn /usr/local/bin/yarnpkg
 
 # Install specified version of yarn
 RUN apk add --no-cache --virtual .build-deps-yarn gnupg tar \
-  && for key in \
-    6A010C5166006599AA17F08146C2130DFD2497F5 \
-  ; do \
-    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-    gpg --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
-  done \
+  && gpg --keyserver keyserver.ubuntu.com --recv-key 908F435E \
   && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
   && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
   && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
